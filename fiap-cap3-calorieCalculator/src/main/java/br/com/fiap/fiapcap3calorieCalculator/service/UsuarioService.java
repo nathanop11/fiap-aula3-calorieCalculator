@@ -1,7 +1,10 @@
 package br.com.fiap.fiapcap3calorieCalculator.service;
 
+import br.com.fiap.fiapcap3calorieCalculator.dto.UsuarioCadastroDTO;
+import br.com.fiap.fiapcap3calorieCalculator.dto.UsuarioExibicaoDTO;
 import br.com.fiap.fiapcap3calorieCalculator.model.Usuario;
 import br.com.fiap.fiapcap3calorieCalculator.repository.UsuarioRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +17,18 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Usuario salvarUsuario(Usuario usuario){
-        return usuarioRepository.save(usuario);
+    public UsuarioExibicaoDTO salvarUsuario(UsuarioCadastroDTO usuariodto){
+        Usuario user = new Usuario();
+        BeanUtils.copyProperties(usuariodto, user);
+        return new UsuarioExibicaoDTO(usuarioRepository.save(user));
     }
 
-    public Usuario buscarPorId(Long id){
+    public UsuarioExibicaoDTO buscarPorId(Long id){
         Optional<Usuario> usuarioOptional =
                 usuarioRepository.findById(id);
 
         if (usuarioOptional.isPresent()){
-            return usuarioOptional.get();
+            return new UsuarioExibicaoDTO(usuarioOptional.get());
         } else {
             throw new RuntimeException("Usuário não existe!");
         }
