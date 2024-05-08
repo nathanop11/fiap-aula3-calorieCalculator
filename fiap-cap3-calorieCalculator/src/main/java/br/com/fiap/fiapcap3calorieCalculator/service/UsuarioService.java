@@ -2,6 +2,7 @@ package br.com.fiap.fiapcap3calorieCalculator.service;
 
 import br.com.fiap.fiapcap3calorieCalculator.dto.UsuarioCadastroDTO;
 import br.com.fiap.fiapcap3calorieCalculator.dto.UsuarioExibicaoDTO;
+import br.com.fiap.fiapcap3calorieCalculator.exception.UsuarioNaoEncontradoException;
 import br.com.fiap.fiapcap3calorieCalculator.model.Usuario;
 import br.com.fiap.fiapcap3calorieCalculator.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
@@ -30,7 +31,7 @@ public class UsuarioService {
         if (usuarioOptional.isPresent()){
             return new UsuarioExibicaoDTO(usuarioOptional.get());
         } else {
-            throw new RuntimeException("Usuário não existe!");
+            throw new UsuarioNaoEncontradoException("Usuário não existe!");
         }
     }
 
@@ -45,7 +46,7 @@ public class UsuarioService {
         if (usuarioOptional.isPresent()){
             usuarioRepository.delete(usuarioOptional.get());
         } else {
-            throw new RuntimeException("Usuário não encontrado!");
+            throw new UsuarioNaoEncontradoException("Usuário não encontrado!");
         }
     }
 
@@ -56,7 +57,7 @@ public class UsuarioService {
         if (usuarioOptional.isPresent()){
             return usuarioRepository.save(usuario);
         } else {
-            throw new RuntimeException("Usuário não encontrado!");
+            throw new UsuarioNaoEncontradoException("Usuário não encontrado!");
         }
     }
 

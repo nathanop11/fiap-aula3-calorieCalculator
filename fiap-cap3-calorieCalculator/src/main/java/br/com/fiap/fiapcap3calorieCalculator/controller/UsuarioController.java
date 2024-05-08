@@ -4,6 +4,7 @@ import br.com.fiap.fiapcap3calorieCalculator.dto.UsuarioCadastroDTO;
 import br.com.fiap.fiapcap3calorieCalculator.dto.UsuarioExibicaoDTO;
 import br.com.fiap.fiapcap3calorieCalculator.model.Usuario;
 import br.com.fiap.fiapcap3calorieCalculator.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class UsuarioController {
 
     @PostMapping("/usuarios")
     @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioExibicaoDTO salvar(@RequestBody UsuarioCadastroDTO usuariodto){
+    public UsuarioExibicaoDTO salvar(@RequestBody @Valid UsuarioCadastroDTO usuariodto){
         return usuarioService.salvarUsuario(usuariodto);
     }
 
