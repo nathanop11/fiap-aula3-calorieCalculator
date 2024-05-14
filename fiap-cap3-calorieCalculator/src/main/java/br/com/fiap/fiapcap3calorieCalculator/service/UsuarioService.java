@@ -7,6 +7,7 @@ import br.com.fiap.fiapcap3calorieCalculator.model.Usuario;
 import br.com.fiap.fiapcap3calorieCalculator.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,9 +20,16 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public UsuarioExibicaoDTO salvarUsuario(UsuarioCadastroDTO usuariodto){
-        Usuario user = new Usuario();
-        BeanUtils.copyProperties(usuariodto, user);
-        return new UsuarioExibicaoDTO(usuarioRepository.save(user));
+        String senhaCriptografada = new
+                BCryptPasswordEncoder().encode(usuariodto.senha());
+
+        Usuario usuario = new Usuario();
+        BeanUtils.copyProperties(usuariodto, usuario);
+        usuario.setSenha(senhaCriptografada);
+
+        Usuario usuarioSalvo = usuarioRepository.save(usuario);
+
+        return new UsuarioExibicaoDTO(usuarioSalvo);
     }
 
     public UsuarioExibicaoDTO buscarPorId(Long id){
